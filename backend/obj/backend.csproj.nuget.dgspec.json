@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "E:\\Codigos\\Coffee\\backend\\backend.csproj": {}
+    "e:\\Codigos\\Coffee\\backend\\backend.csproj": {}
   },
   "projects": {
-    "E:\\Codigos\\Coffee\\backend\\backend.csproj": {
+    "e:\\Codigos\\Coffee\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "E:\\Codigos\\Coffee\\backend\\backend.csproj",
+        "projectUniqueName": "e:\\Codigos\\Coffee\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "E:\\Codigos\\Coffee\\backend\\backend.csproj",
+        "projectPath": "e:\\Codigos\\Coffee\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\gksno\\.nuget\\packages\\",
-        "outputPath": "E:\\Codigos\\Coffee\\backend\\obj\\",
+        "outputPath": "e:\\Codigos\\Coffee\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\gksno\\AppData\\Roaming\\NuGet\\NuGet.Config",

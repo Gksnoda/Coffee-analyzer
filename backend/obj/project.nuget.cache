@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "nYh5h+cETwbkXLhWD0Arqc/HfED3sgxmx8fedZMLbyfIkR78e/ib8/6rVA28yyAatelD5Ww7ZQtUQbaRXjWWQA==",
+  "dgSpecHash": "+Ixe892RwXoqgRL5bSaMXMZfCoLxPf/RG8EjXu6ciMZBXujZ5vJM0WPu3Eo3/IhgLA44ioEAkQm+yQIIpEjIiA==",
   "success": true,
-  "projectFilePath": "E:\\Codigos\\Coffee\\backend\\backend.csproj",
+  "projectFilePath": "e:\\Codigos\\Coffee\\backend\\backend.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\gksno\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\gksno\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.11\\microsoft.aspnetcore.openapi.7.0.11.nupkg.sha512",
