@@ -13,5 +13,8 @@ import {MatButtonModule} from '@angular/material/button';
 
 export class NavComponent{
 
+  Apertei(){
+    alert("Botão apertado!");
+  }
 
 }
