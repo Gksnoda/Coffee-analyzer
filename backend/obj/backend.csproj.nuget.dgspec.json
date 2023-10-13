@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "e:\\Codigos\\Coffee\\backend\\backend.csproj": {}
+    "E:\\Codigos\\Coffee\\backend\\backend.csproj": {}
   },
   "projects": {
-    "e:\\Codigos\\Coffee\\backend\\backend.csproj": {
+    "E:\\Codigos\\Coffee\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "e:\\Codigos\\Coffee\\backend\\backend.csproj",
+        "projectUniqueName": "E:\\Codigos\\Coffee\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "e:\\Codigos\\Coffee\\backend\\backend.csproj",
+        "projectPath": "E:\\Codigos\\Coffee\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\gksno\\.nuget\\packages\\",
-        "outputPath": "e:\\Codigos\\Coffee\\backend\\obj\\",
+        "outputPath": "E:\\Codigos\\Coffee\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\gksno\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,23 +40,29 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[7.0.11, )"
-            },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
-            "Microsoft.EntityFrameworkCore.Relational": {
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[7.0.11, )"
+              "version": "[7.0.12, )"
+            },
+            "MySqlConnector": {
+              "target": "Package",
+              "version": "[2.2.7, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[7.0.0, )"
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
@@ -82,7 +88,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.402\\RuntimeIdentifierGraph.json"
         }
       }
     }

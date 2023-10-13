@@ -6,7 +6,6 @@ E:\Codigos\Coffee\backend\bin\Debug\net7.0\backend.runtimeconfig.json
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\backend.dll
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\backend.pdb
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\Humanizer.dll
-E:\Codigos\Coffee\backend\bin\Debug\net7.0\Microsoft.AspNetCore.OpenApi.dll
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.dll
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Abstractions.dll
 E:\Codigos\Coffee\backend\bin\Debug\net7.0\Microsoft.EntityFrameworkCore.Design.dll
@@ -39,3 +38,5 @@ E:\Codigos\Coffee\backend\obj\Debug\net7.0\refint\backend.dll
 E:\Codigos\Coffee\backend\obj\Debug\net7.0\backend.pdb
 E:\Codigos\Coffee\backend\obj\Debug\net7.0\backend.genruntimeconfig.cache
 E:\Codigos\Coffee\backend\obj\Debug\net7.0\ref\backend.dll
+E:\Codigos\Coffee\backend\bin\Debug\net7.0\MySqlConnector.dll
+E:\Codigos\Coffee\backend\bin\Debug\net7.0\Pomelo.EntityFrameworkCore.MySql.dll
