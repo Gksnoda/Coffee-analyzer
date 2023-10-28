@@ -16,6 +16,8 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddScoped<IDias, DiasView>();
 
+builder.Services.AddCors();
+
 // Configure the HTTP request pipeline.
 if (builder.Environment.IsDevelopment())
 {
@@ -31,6 +33,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors(opcoes => opcoes.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 app.UseAuthorization();
 app.MapControllers();
 

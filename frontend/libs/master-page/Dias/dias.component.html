@@ -1,0 +1,14 @@
+<div>
+  <table *ngIf="dias">
+    <tr>
+      <th>Data</th>
+      <th>Real</th>
+      <th>Dolar</th>
+    </tr>
+    <tr *ngFor="let dia of dias">
+      <td>{{dia.Data}}</td>
+      <td>{{dia.ValorReal}}</td>
+      <td>{{dia.ValorDolar}}</td>
+    </tr>
+  </table>
+</div>
