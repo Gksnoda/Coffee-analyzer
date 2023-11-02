@@ -1,3 +1,4 @@
+import { HomeComponent } from './../../libs/Home/home/home.component';
 import { DiasService } from './../../libs/master-page/Dias/dias.service';
 import { DiasComponent } from './../../libs/master-page/Dias/dias.component';
 import { Component } from '@angular/core';
@@ -19,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
     CommonModule,
     HttpClientModule,
     ReactiveFormsModule,
-    DiasComponent
+    DiasComponent,
+    HomeComponent
     ],
     providers: [DiasService],
   selector: 'app-root',

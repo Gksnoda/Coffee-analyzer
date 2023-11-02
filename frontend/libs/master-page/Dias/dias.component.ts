@@ -21,6 +21,7 @@ export class DiasComponent implements OnInit {
   {
     this.diasService.PegarTodos().subscribe(resultado => {
       this.dias = resultado;
+      console.log('Dados armazenados:', this.dias); // Só pra ver se está armazenando o dado
     });
   }
 

@@ -1,5 +1,5 @@
 export class Dia {
-    Data: string;
-    ValorReal: number;
-    ValorDolar: number;
+    data: string;
+    valorReal: number;
+    valorDolar: number;
 }

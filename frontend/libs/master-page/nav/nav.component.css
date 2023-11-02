@@ -1,0 +1,15 @@
+.mat-toolbar {
+    display: flex;
+    justify-content: space-between; /* Espaço entre os elementos */
+    align-items: center; /* Alinha os elementos verticalmente */
+    padding: 10px;
+    background-color: brown;
+    color: azure;
+    font-size: 25px;
+    
+}
+
+.meio {
+    text-align: center; /* Alinha o texto ao centro */
+    flex-grow: 1; /* Cresce para ocupar o espaço restante no centro */
+}

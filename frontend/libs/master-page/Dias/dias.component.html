@@ -1,14 +1,17 @@
+<h1>Printando os 10 primeiros:</h1>
+
 <div>
-  <table *ngIf="dias">
+  <table>
     <tr>
       <th>Data</th>
       <th>Real</th>
       <th>Dolar</th>
     </tr>
-    <tr *ngFor="let dia of dias">
-      <td>{{dia.Data}}</td>
-      <td>{{dia.ValorReal}}</td>
-      <td>{{dia.ValorDolar}}</td>
-    </tr>
   </table>
+</div>
+
+
+<div *ngFor="let dia of dias">
+  <!-- Exibir cada 'dia' individualmente -->
+  <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
 </div>
