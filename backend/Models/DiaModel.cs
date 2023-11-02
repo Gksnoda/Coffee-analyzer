@@ -7,10 +7,10 @@ namespace backend.Models
 {
     public class DiaModel
     {
-        public DateTime Data { get; set; }
+        public DateOnly Data { get; set; }
 
-        public float ValorReal {get; set;}
+        public decimal ValorReal {get; set;}
 
-        public float ValorDolar {get; set;}
+        public decimal ValorDolar {get; set;}
     }
 }
