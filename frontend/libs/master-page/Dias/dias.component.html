@@ -1,17 +1,20 @@
-<h1>Printando os 10 primeiros:</h1>
-
 <div>
   <table>
     <tr>
-      <th>Data</th>
-      <th>Real</th>
+      <th>Data -</th>
+      <th>Real -</th>
       <th>Dolar</th>
     </tr>
   </table>
 </div>
 
-
-<div *ngFor="let dia of dias">
-  <!-- Exibir cada 'dia' individualmente -->
-  <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
+<div style="width: 500px; height: 500px;"> 
+  <canvas #myChart style="width: 500px; height: 500px;"></canvas>
 </div>
+<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
+
+
+<!-- <div *ngFor="let dia of dias"> -->
+  <!-- Exibir cada 'dia' individualmente -->
+  <!-- <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
+</div> -->

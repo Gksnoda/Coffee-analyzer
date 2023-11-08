@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class DiasService {
 
-    url = 'http://localhost:5100/api/Dias/primeiros'
+    url = 'http://localhost:5100/api/Dias'
     constructor(private http: HttpClient) { }
 
     PegarTodos(): Observable<Dia[]>{

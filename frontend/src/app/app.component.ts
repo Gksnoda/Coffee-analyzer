@@ -9,6 +9,7 @@ import { NavComponent } from '../../libs/master-page/nav/nav.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
+import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
 
 
 @Component({
@@ -21,9 +22,12 @@ import { ReactiveFormsModule } from '@angular/forms';
     HttpClientModule,
     ReactiveFormsModule,
     DiasComponent,
-    HomeComponent
+    HomeComponent,
+    NgChartsModule
     ],
-    providers: [DiasService],
+  providers: [DiasService,
+    { provide: NgChartsConfiguration, useValue: { generateColors: false}}
+    ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
