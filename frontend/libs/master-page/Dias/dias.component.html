@@ -1,20 +1,24 @@
-<div>
-  <table>
-    <tr>
-      <th>Data -</th>
-      <th>Real -</th>
-      <th>Dolar</th>
-    </tr>
-  </table>
-</div>
+<mat-form-field>
+  <mat-label>Ano</mat-label>
+  <mat-select [(value)]="selectAno" (selectionChange)="onAnoSelect($event)">
+    <mat-option>Nenhum</mat-option>
+    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+  </mat-select>
+</mat-form-field>
+
+
+<mat-form-field>
+  <mat-label>Mes</mat-label>
+  <mat-select [(value)]="selectMes" (selectionChange)="onMesSelect($event)">
+    <mat-option>Nenhum</mat-option>
+    <mat-option *ngFor="let mes of meses" [value]="mes">{{ mes }}</mat-option>
+  </mat-select>
+</mat-form-field>
 
 <div style="width: 500px; height: 500px;"> 
   <canvas #myChart style="width: 500px; height: 500px;"></canvas>
 </div>
-<!-- <script src="https://cdn.jsdelivr.net/npm/chart.js"></script> -->
 
-
-<!-- <div *ngFor="let dia of dias"> -->
-  <!-- Exibir cada 'dia' individualmente -->
-  <!-- <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
+<!-- <div *ngFor="let dia of dias">
+  <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
 </div> -->
