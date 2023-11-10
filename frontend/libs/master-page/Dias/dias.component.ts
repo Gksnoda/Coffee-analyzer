@@ -39,6 +39,18 @@ export class DiasComponent implements OnInit {
   // Constructor
   constructor(private diasService: DiasService) {}
 
+    // Função que chama quando inicia o componente
+    ngOnInit(): void {
+
+      //Criando o grafico
+      this.createChart();
+  
+      // Pegando o model do serviço
+      this.diasService.PegarTodos().subscribe(resultado => {
+        this.dias = resultado;
+      });
+    }
+
   // Filhos do html
   @ViewChild("myChart", {static: true}) elemento: ElementRef;
 
@@ -62,17 +74,26 @@ export class DiasComponent implements OnInit {
   // Input da forma de separação
   selectForma: string;
   onFormaSelect(event: any): void {
+    if(this.selectForma == 'Anualmente'){
+      this.createChart();
+    }else if(this.selectForma === 'Mensalmente'){
+      this.createChart();
+    }else if(this.selectForma === 'Diariamente'){
+      this.createChart();
+    }
   }
 
 
   // Input de anos multiplos para media anual
   selectAnos : number[] = []
   anosAntigo : number[] = []
+  dataReal: number[]= [];
+  dataDolar: number []= [];
   onAnosSelect(event: any): void {
 
     let ultimoAno : any;
-    let indexUltimo : number;
     let medias: any;
+    
     // A função faz o seguinte: Pega todos os anos selecionados e coloca no labels de forma ordenada
     // pega o ultimo valor que o usuario selecionou no input e guarda
     // pega o index desse ultimo valor no labels (pois ele foi ordenado)
@@ -80,20 +101,23 @@ export class DiasComponent implements OnInit {
 
     this.labels = this.selectAnos.map(anos => anos.toString());
     ultimoAno = this.verificaUltimoValor(this.selectAnos, this.anosAntigo);
-    indexUltimo = this.labels.indexOf(ultimoAno.valor.toString());
     medias = this.calcularMediaAnual(this.dias, ultimoAno.valor);
+
     
     // Depois ele verifica: O usuario está adicionando ou tirando um ano do grafico?
-    if(ultimoAno.maior){
-      this.data.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaReal);
+    // Se está tirando, ele coloca no data, senão, tira
+    if(ultimoAno.add){
+      this.dataReal.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaReal);
+      this.dataDolar.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaDolar);
     } else {
-      this.data.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
+      this.dataReal.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
+      this.dataDolar.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
     }
 
     //att o grafico
     this.anosAntigo = this.selectAnos;
-    console.log("log data no anos:", this.data);
-    this.updateChart();
+    this.grafico.data.labels = this.labels;
+    this.atualizarGrafico(this.dataReal, this.dataDolar);
   }
 
   // Quando ele seleciona o ano la no input
@@ -110,7 +134,7 @@ export class DiasComponent implements OnInit {
     } else {
       this.data = [0]
     }
-    this.updateChart();
+    this.grafico.update();
   }
 
   // Quando ele seleciona o mes la no input
@@ -140,17 +164,6 @@ export class DiasComponent implements OnInit {
     'Dezembro': 12,
   };
 
-  // Função que chama quando inicia o componente
-  ngOnInit(): void {
-
-    //Criando o grafico
-    this.createChart();
-
-    // Pegando o model do serviço
-    this.diasService.PegarTodos().subscribe(resultado => {
-      this.dias = resultado;
-    });
-  }
 
   // Função para criar o grafico
   createChart(): void {
@@ -161,11 +174,42 @@ export class DiasComponent implements OnInit {
         labels: this.labels,
         datasets: [
           {
-            data: this.data, label: 'Reais'
+            data: this.data
           }
         ]
       }
     });
+  }
+
+
+  atualizarGrafico(dataBarras: number[], dataLinhas: number[]): void {
+    // Atualiza os dados no gráfico
+    this.grafico.data = {
+      labels: this.selectAnos.map(String),
+      datasets: [
+        {
+          label: 'Valor Real (Barra)',
+          data: dataBarras,
+          type: 'bar', // Configura o tipo para barra
+          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Valor Dólar (Linha)',
+          data: dataLinhas,
+          type: 'line', // Configura o tipo para linha
+          fill: false,
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1,
+          pointBackgroundColor: 'black',
+          pointRadius: 6,
+        }
+      ]
+    };
+  
+    // Atualiza o gráfico
+    this.grafico.update();
   }
 
   // Função para calcular a media do mes
@@ -218,23 +262,15 @@ export class DiasComponent implements OnInit {
     }
   }
 
-  // Função para atualizar o grafico
-  updateChart(): void {
-    // Atualizando dados do gráfico
-    this.grafico.data.labels = this.labels;
-    this.grafico.data.datasets[0].data = this.data;
-  
-    // Atualizando o gráfico
-    this.grafico.update();
-  }
+
 
   // Função para verificar a diferença entre dois vetores (maior para menor)
   // ele retorna o valor diferente e true se é do primeiro vetor, ou false se é do segundo
-  verificaUltimoValor(A: number[], B: number[]): {valor: number, maior: boolean} {
+  verificaUltimoValor(A: number[], B: number[]): {valor: number, add: boolean} {
     if (A.length > B.length) {
-      return {valor: A.find(value => !B.includes(value)) || 0, maior: true}
+      return {valor: A.find(value => !B.includes(value)) || 0, add: true}
     } else {
-      return {valor: B.find(value => !A.includes(value)) || 0, maior: false}
+      return {valor: B.find(value => !A.includes(value)) || 0, add: false}
     }
   }
 
