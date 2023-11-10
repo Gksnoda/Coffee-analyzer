@@ -50,11 +50,11 @@ export class DiasComponent implements OnInit {
   anos = [
     1997, 1998, 1999, 2000, 2001, 2002, 2003, 2004, 2005, 
     2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 
-    2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023
+    2016, 2017, 2018, 2019, 2020, 2021, 2022
   ];
   formas = ["Anualmente", "Mensalmente", "Diariamente"];
 
-  labels = this.meses;
+  labels: string[] = [];
   mediaRealMensal: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   data: number[] = [];
 
@@ -73,7 +73,6 @@ export class DiasComponent implements OnInit {
     let ultimoAno : any;
     let indexUltimo : number;
     let medias: any;
-
     // A função faz o seguinte: Pega todos os anos selecionados e coloca no labels de forma ordenada
     // pega o ultimo valor que o usuario selecionou no input e guarda
     // pega o index desse ultimo valor no labels (pois ele foi ordenado)
@@ -86,9 +85,9 @@ export class DiasComponent implements OnInit {
     
     // Depois ele verifica: O usuario está adicionando ou tirando um ano do grafico?
     if(ultimoAno.maior){
-      this.data.splice(indexUltimo, 0, medias.mediaReal);
+      this.data.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaReal);
     } else {
-      this.data.splice(indexUltimo, 1);
+      this.data.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
     }
 
     //att o grafico
@@ -189,7 +188,7 @@ export class DiasComponent implements OnInit {
     }
     mediaReal = mediaReal/datasFiltradas.length;
     mediaDolar = mediaDolar/datasFiltradas.length;
-    console.log("função:", mediaReal);
+    // console.log("função:", mediaReal);
 
     // toFixed() retorna uma string, ai o + transforma em number
     // toFixed() é para fazer o limite de numeros decimais
