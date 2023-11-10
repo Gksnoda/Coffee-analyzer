@@ -1,20 +1,43 @@
+
 <mat-form-field>
-  <mat-label>Ano</mat-label>
-  <mat-select [(value)]="selectAno" (selectionChange)="onAnoSelect($event)">
+  <mat-label>Forma</mat-label>
+  <mat-select [(value)]="selectForma" (selectionChange)="onFormaSelect($event)">
     <mat-option>Nenhum</mat-option>
-    <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+    <mat-option *ngFor="let forma of formas" [value]="forma">{{ forma }}</mat-option>
   </mat-select>
 </mat-form-field>
 
 
-<mat-form-field>
-  <mat-label>Mes</mat-label>
-  <mat-select [(value)]="selectMes" (selectionChange)="onMesSelect($event)">
-    <mat-option>Nenhum</mat-option>
-    <mat-option *ngFor="let mes of meses" [value]="mes">{{ mes }}</mat-option>
-  </mat-select>
-</mat-form-field>
+<div *ngIf="selectForma === 'Anualmente'">
 
+  <mat-form-field appearance="fill">
+    <mat-label>Selecionar Anos Múltiplos</mat-label>
+    <mat-select [(value)]="selectAnos" (selectionChange)="onAnosSelect($event)" multiple>
+      <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+
+</div>
+
+<div *ngIf="selectForma === 'Diariamente'">
+  <mat-form-field>
+    <mat-label>Ano</mat-label>
+    <mat-select [(value)]="selectAno" (selectionChange)="onAnoSelect($event)">
+      <mat-option>Nenhum</mat-option>
+      <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Mes</mat-label>
+    <mat-select [(value)]="selectMes" (selectionChange)="onMesSelect($event)">
+      <mat-option>Nenhum</mat-option>
+      <mat-option *ngFor="let mes of meses" [value]="mes">{{ mes }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
 <div style="width: 500px; height: 500px;"> 
   <canvas #myChart style="width: 500px; height: 500px;"></canvas>
 </div>
