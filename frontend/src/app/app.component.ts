@@ -4,7 +4,6 @@ import { DiasComponent } from './../../libs/master-page/Dias/dias.component';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { NxWelcomeComponent } from './nx-welcome.component';
-import { TestandoComponent } from './testando/testando.component';
 import { NavComponent } from '../../libs/master-page/nav/nav.component';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
@@ -16,7 +15,6 @@ import { NgChartsModule, NgChartsConfiguration } from 'ng2-charts';
   standalone: true,
   imports: [NxWelcomeComponent,
     RouterModule,
-    TestandoComponent,
     NavComponent,
     CommonModule,
     HttpClientModule,

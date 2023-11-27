@@ -20,6 +20,28 @@
 
 </div>
 
+
+<div *ngIf="selectForma === 'Mensalmente'">
+
+  <mat-form-field>
+    <mat-label>Ano</mat-label>
+    <mat-select [(value)]="selectAno" (selectionChange)="onAnoSelect($event)">
+      <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+
+  <mat-form-field>
+    <mat-label>Mes</mat-label>
+    <mat-select [(value)]="selectMeses" (selectionChange)="onMensalSelect($event)" multiple>
+      <mat-option *ngFor="let mes of meses" [value]="mes">{{ mes }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+  
+
+</div>
+
+
 <div *ngIf="selectForma === 'Diariamente'">
   <mat-form-field>
     <mat-label>Ano</mat-label>

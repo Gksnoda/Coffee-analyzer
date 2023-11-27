@@ -75,18 +75,21 @@ export class DiasComponent implements OnInit {
   selectForma: string;
   onFormaSelect(event: any): void {
     if(this.selectForma == 'Anualmente'){
+      this.grafico.destroy();
       this.createChart();
     }else if(this.selectForma === 'Mensalmente'){
+      this.grafico.destroy();
       this.createChart();
     }else if(this.selectForma === 'Diariamente'){
+      this.grafico.destroy();
       this.createChart();
     }
   }
 
 
   // Input de anos multiplos para media anual
-  selectAnos : number[] = []
-  anosAntigo : number[] = []
+  selectAnos : number[] = [];
+  anosAntigo : number[] = [];
   dataReal: number[]= [];
   dataDolar: number []= [];
   onAnosSelect(event: any): void {
@@ -116,36 +119,50 @@ export class DiasComponent implements OnInit {
 
     //att o grafico
     this.anosAntigo = this.selectAnos;
-    this.grafico.data.labels = this.labels;
     this.atualizarGrafico(this.dataReal, this.dataDolar);
   }
+
 
   // Quando ele seleciona o ano la no input
   selectAno: number;
   onAnoSelect(event: any): void {
-    let medias: any;
-    if (this.selectAno !== undefined) {
-      console.log('ano selecionado:', this.selectAno);
-      for(let i = 0; i < 12; i++){
-        medias = this.calcularMediaPorMes(this.dias, this.selectAno, i+1);
-        this.mediaRealMensal[i] = medias.mediaReal;
-        this.data = this.mediaRealMensal;
-      }
-    } else {
-      this.data = [0]
-    }
-    this.grafico.update();
+
   }
+
+  //Seleção de mes no mensal
+  selectMeses: string[] = [];
+  mesesAntigo: string[] = [];
+  onMensalSelect(event: any): void {
+
+    let ultimoMes : any;
+    let medias: any;
+    let mesNum : number;
+
+    this.labels = this.selectMeses;
+    ultimoMes = this.verificaUltimoValor(this.selectMeses, this.mesesAntigo);
+    mesNum = this.MesParaNumero[ultimoMes.valor];
+    medias = this.calcularMediaPorMes(this.dias, this.selectAno, mesNum);
+
+    if(ultimoMes.add){
+      this.dataReal.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.mediaReal);
+      this.dataDolar.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.mediaDolar);
+    } else {
+      this.dataReal.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
+      this.dataDolar.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
+    }
+
+    console.log("Real:", this.dataReal);
+    console.log("Dolar:", this.dataDolar);
+
+    this.mesesAntigo = this.selectMeses;
+    this.atualizarGrafico(this.dataReal, this.dataDolar);
+  }
+
 
   // Quando ele seleciona o mes la no input
   selectMes: string;
   mesNumero: number;
   onMesSelect(event: any): void {
-    this.mesNumero = this.MesParaNumero[this.selectMes]
-    if (this.mesNumero !== undefined) {
-      console.log('mes correspondente:', this.mesNumero);
-      this.calcularMediaPorMes(this.dias, this.selectAno, this.mesNumero);
-    }
   }
 
   // map do mes
@@ -171,10 +188,10 @@ export class DiasComponent implements OnInit {
     this.grafico = new Chart(this.elemento.nativeElement, {
       type: 'bar',
       data: {
-        labels: this.labels,
+        labels: [],
         datasets: [
           {
-            data: this.data
+            data: []
           }
         ]
       }
@@ -185,25 +202,23 @@ export class DiasComponent implements OnInit {
   atualizarGrafico(dataBarras: number[], dataLinhas: number[]): void {
     // Atualiza os dados no gráfico
     this.grafico.data = {
-      labels: this.selectAnos.map(String),
+      labels: this.labels,
       datasets: [
         {
-          label: 'Valor Real (Barra)',
+          label: 'Valor Real',
           data: dataBarras,
           type: 'bar', // Configura o tipo para barra
-          backgroundColor: 'rgba(75, 192, 192, 0.2)',
+          backgroundColor: 'rgba(50, 227, 65, 0.7)',
           borderColor: 'rgba(75, 192, 192, 1)',
           borderWidth: 1
         },
         {
-          label: 'Valor Dólar (Linha)',
+          label: 'Valor Dólar',
           data: dataLinhas,
-          type: 'line', // Configura o tipo para linha
-          fill: false,
-          borderColor: 'rgba(255, 99, 132, 1)',
+          type: 'bar', // Configura o tipo para barra
+          backgroundColor: 'rgba(222, 185, 40, 0.7)',
+          borderColor: 'rgba(222, 185, 40, 0.7)',
           borderWidth: 1,
-          pointBackgroundColor: 'black',
-          pointRadius: 6,
         }
       ]
     };
@@ -266,7 +281,7 @@ export class DiasComponent implements OnInit {
 
   // Função para verificar a diferença entre dois vetores (maior para menor)
   // ele retorna o valor diferente e true se é do primeiro vetor, ou false se é do segundo
-  verificaUltimoValor(A: number[], B: number[]): {valor: number, add: boolean} {
+  verificaUltimoValor(A: any[], B: any[]): {valor: any, add: boolean} {
     if (A.length > B.length) {
       return {valor: A.find(value => !B.includes(value)) || 0, add: true}
     } else {
