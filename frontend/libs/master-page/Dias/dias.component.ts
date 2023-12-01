@@ -40,16 +40,19 @@ export class DiasComponent implements OnInit {
   constructor(private diasService: DiasService) {}
 
     // Função que chama quando inicia o componente
-    ngOnInit(): void {
+  ngOnInit(): void {
 
-      //Criando o grafico
-      this.createChart();
+    const canvas: HTMLCanvasElement = this.elemento.nativeElement;
+    canvas.width = 1000;
+    canvas.height = 600;
+    //Criando o grafico
+    this.createChart();
   
-      // Pegando o model do serviço
-      this.diasService.PegarTodos().subscribe(resultado => {
-        this.dias = resultado;
-      });
-    }
+    // Pegando o model do serviço
+    this.diasService.PegarTodos().subscribe(resultado => {
+      this.dias = resultado;
+    });
+  }
 
   // Filhos do html
   @ViewChild("myChart", {static: true}) elemento: ElementRef;
@@ -67,9 +70,7 @@ export class DiasComponent implements OnInit {
   formas = ["Anualmente", "Mensalmente", "Diariamente"];
 
   labels: string[] = [];
-  mediaRealMensal: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
   data: number[] = [];
-
 
   // Input da forma de separação
   selectForma: string;
@@ -77,12 +78,16 @@ export class DiasComponent implements OnInit {
     if(this.selectForma == 'Anualmente'){
       this.grafico.destroy();
       this.createChart();
+      this.resetaVariaveis();
     }else if(this.selectForma === 'Mensalmente'){
       this.grafico.destroy();
       this.createChart();
+      this.resetaVariaveis();
     }else if(this.selectForma === 'Diariamente'){
       this.grafico.destroy();
       this.createChart();
+      this.resetaVariaveis();
+
     }
   }
 
@@ -287,6 +292,21 @@ export class DiasComponent implements OnInit {
     } else {
       return {valor: B.find(value => !A.includes(value)) || 0, add: false}
     }
+  }
+
+
+  resetaVariaveis() {
+
+    this.selectAnos = [];
+    this.anosAntigo = [];
+    this.dataReal = [];
+    this.dataDolar = [];
+    this.labels  = [];
+    this.data = [];
+    this.selectMeses = [];
+    this.mesesAntigo = [];
+    this.selectAno = 0;
+
   }
 
 }
