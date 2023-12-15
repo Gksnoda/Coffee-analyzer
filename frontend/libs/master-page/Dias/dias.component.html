@@ -16,8 +16,9 @@
       <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
     </mat-select>
   </mat-form-field>
-  
 
+  <mat-checkbox (change)="onCheckboxChangeAnual($event)">Selecionar todos</mat-checkbox>
+  
 </div>
 
 
@@ -38,33 +39,14 @@
     </mat-select>
   </mat-form-field>
   
+  <mat-checkbox (change)="onCheckboxChangeMensal($event)">Selecionar todos</mat-checkbox>
 
 </div>
 
 
 <div *ngIf="selectForma === 'Diariamente'">
-  <mat-form-field>
-    <mat-label>Ano</mat-label>
-    <mat-select [(value)]="selectAno" (selectionChange)="onAnoSelect($event)">
-      <mat-option>Nenhum</mat-option>
-      <mat-option *ngFor="let ano of anos" [value]="ano">{{ ano }}</mat-option>
-    </mat-select>
-  </mat-form-field>
-
-
-  <mat-form-field>
-    <mat-label>Mes</mat-label>
-    <mat-select [(value)]="selectMes" (selectionChange)="onMesSelect($event)">
-      <mat-option>Nenhum</mat-option>
-      <mat-option *ngFor="let mes of meses" [value]="mes">{{ mes }}</mat-option>
-    </mat-select>
-  </mat-form-field>
 </div>
 
 <div style="width: 1000px; height: 700px;"> 
   <canvas #myChart></canvas>
 </div>
-
-<!-- <div *ngFor="let dia of dias">
-  <p>{{ dia.data }} - {{ dia.valorReal }} - {{ dia.valorDolar }}</p>
-</div> -->

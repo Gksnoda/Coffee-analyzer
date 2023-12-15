@@ -12,6 +12,7 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
 import { DoCheck } from '@angular/core';
+import {MatCheckboxModule} from '@angular/material/checkbox';
 
 @Component({
   standalone: true,
@@ -27,6 +28,7 @@ import { DoCheck } from '@angular/core';
     ReactiveFormsModule,
     AsyncPipe,
     MatSelectModule,
+    MatCheckboxModule,
   ]
 })
 
@@ -57,7 +59,6 @@ export class DiasComponent implements OnInit {
   // Filhos do html
   @ViewChild("myChart", {static: true}) elemento: ElementRef;
 
-
   // Variaveis
   grafico : Chart;
   meses = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", 
@@ -68,6 +69,7 @@ export class DiasComponent implements OnInit {
     2016, 2017, 2018, 2019, 2020, 2021, 2022
   ];
   formas = ["Anualmente", "Mensalmente", "Diariamente"];
+  diasDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
 
   labels: string[] = [];
   data: number[] = [];
@@ -75,20 +77,17 @@ export class DiasComponent implements OnInit {
   // Input da forma de separação
   selectForma: string;
   onFormaSelect(event: any): void {
-    if(this.selectForma == 'Anualmente'){
+    let valor: any;
       this.grafico.destroy();
       this.createChart();
       this.resetaVariaveis();
-    }else if(this.selectForma === 'Mensalmente'){
-      this.grafico.destroy();
-      this.createChart();
-      this.resetaVariaveis();
-    }else if(this.selectForma === 'Diariamente'){
-      this.grafico.destroy();
-      this.createChart();
-      this.resetaVariaveis();
-
-    }
+      if (this.selectForma === "Diariamente"){
+        console.log("Entrou no diar");
+        this.diario(this.dias);
+        this.atualizarGrafico(this.dataReal, this.dataDolar);
+        console.log(this.dataReal, this.dataDolar);
+        console.log(this.labels);
+      }
   }
 
 
@@ -111,9 +110,11 @@ export class DiasComponent implements OnInit {
     ultimoAno = this.verificaUltimoValor(this.selectAnos, this.anosAntigo);
     medias = this.calcularMediaAnual(this.dias, ultimoAno.valor);
 
-    
     // Depois ele verifica: O usuario está adicionando ou tirando um ano do grafico?
     // Se está tirando, ele coloca no data, senão, tira
+    // Ele vai verificar qual é o index daquele ano que eu quero na lista "labels", pois
+    // na lista labels ja está ordenadado por causa do selectAnos
+    // splice: onde, quantos eu devo remover, qual valor
     if(ultimoAno.add){
       this.dataReal.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaReal);
       this.dataDolar.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaDolar);
@@ -127,11 +128,9 @@ export class DiasComponent implements OnInit {
     this.atualizarGrafico(this.dataReal, this.dataDolar);
   }
 
-
   // Quando ele seleciona o ano la no input
   selectAno: number;
   onAnoSelect(event: any): void {
-
   }
 
   //Seleção de mes no mensal
@@ -164,11 +163,6 @@ export class DiasComponent implements OnInit {
   }
 
 
-  // Quando ele seleciona o mes la no input
-  selectMes: string;
-  mesNumero: number;
-  onMesSelect(event: any): void {
-  }
 
   // map do mes
   MesParaNumero: { [key: string]: number } = {
@@ -252,7 +246,6 @@ export class DiasComponent implements OnInit {
     }
     mediaReal = mediaReal/datasFiltradas.length;
     mediaDolar = mediaDolar/datasFiltradas.length;
-    // console.log("função:", mediaReal);
 
     // toFixed() retorna uma string, ai o + transforma em number
     // toFixed() é para fazer o limite de numeros decimais
@@ -273,6 +266,7 @@ export class DiasComponent implements OnInit {
       mediaReal += medias.mediaReal;
       mediaDolar += medias.mediaDolar;
     }
+
     mediaReal = mediaReal/12;
     mediaDolar = mediaDolar/12;
 
@@ -307,6 +301,55 @@ export class DiasComponent implements OnInit {
     this.mesesAntigo = [];
     this.selectAno = 0;
 
+  }
+
+  diario(dias: Dia[]) {
+    const resultado: { [key: string]: { valorReal: number, valorDolar: number , qntd: number} } = {};
+    this.labels = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
+    // Itera sobre os dias
+    dias.forEach((dia) => {
+      const data = new Date(dia.data);
+      const diaNum = data.getUTCDay();
+      const diaDaSemana = this.obterNomeDia(diaNum);
+
+      // Adiciona os valores ao resultado
+      if (!resultado[diaDaSemana]) {
+        resultado[diaDaSemana] = { valorReal: 0, valorDolar: 0 , qntd: 0};
+      }
+
+      resultado[diaDaSemana].valorReal += dia.valorReal;
+      resultado[diaDaSemana].valorDolar += dia.valorDolar;
+      resultado[diaDaSemana].qntd += 1;
+    });
+
+    Object.keys(resultado).forEach((diaDaSemana)=>{
+      resultado[diaDaSemana].valorReal /= resultado[diaDaSemana].qntd;
+      resultado[diaDaSemana].valorDolar /= resultado[diaDaSemana].qntd;
+    });
+
+    this.labels.forEach((dia)=> {
+      console.log(dia)
+      this.dataReal.push(resultado[dia].valorReal);
+      this.dataDolar.push(resultado[dia].valorDolar);
+    });
+  }
+
+  // Função auxiliar para obter o nome do dia da semana
+  obterNomeDia(diaDaSemana: number): string {
+    const diasDaSemana = ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'];
+    return diasDaSemana[diaDaSemana];
+  }
+    
+  onCheckboxChangeAnual(event: any) {
+    if (event.checked) {
+        
+    }
+  }
+
+  onCheckboxChangeMensal(event: any) {
+    if (event.checked) {
+        
+    }
   }
 
 }
