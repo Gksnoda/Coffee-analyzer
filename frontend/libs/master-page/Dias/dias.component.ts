@@ -77,7 +77,6 @@ export class DiasComponent implements OnInit {
   // Input da forma de separação
   selectForma: string;
   onFormaSelect(event: any): void {
-    let valor: any;
       this.grafico.destroy();
       this.createChart();
       this.resetaVariaveis();
@@ -85,8 +84,6 @@ export class DiasComponent implements OnInit {
         console.log("Entrou no diar");
         this.diario(this.dias);
         this.atualizarGrafico(this.dataReal, this.dataDolar);
-        console.log(this.dataReal, this.dataDolar);
-        console.log(this.labels);
       }
   }
 
@@ -130,7 +127,13 @@ export class DiasComponent implements OnInit {
 
   // Quando ele seleciona o ano la no input
   selectAno: number;
+  cbMensal: boolean = false;
   onAnoSelect(event: any): void {
+    console.log('Ano e cb:', this.cbMensal);
+    if(this.cbMensal){
+      this.onCheckboxChangeMensal(0);
+    }
+
   }
 
   //Seleção de mes no mensal
@@ -154,9 +157,6 @@ export class DiasComponent implements OnInit {
       this.dataReal.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
       this.dataDolar.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
     }
-
-    console.log("Real:", this.dataReal);
-    console.log("Dolar:", this.dataDolar);
 
     this.mesesAntigo = this.selectMeses;
     this.atualizarGrafico(this.dataReal, this.dataDolar);
@@ -289,8 +289,8 @@ export class DiasComponent implements OnInit {
   }
 
 
+  // Função para resetar as variaveis
   resetaVariaveis() {
-
     this.selectAnos = [];
     this.anosAntigo = [];
     this.dataReal = [];
@@ -300,9 +300,9 @@ export class DiasComponent implements OnInit {
     this.selectMeses = [];
     this.mesesAntigo = [];
     this.selectAno = 0;
-
   }
 
+  // Função para calcular a media dos dias da semana
   diario(dias: Dia[]) {
     const resultado: { [key: string]: { valorReal: number, valorDolar: number , qntd: number} } = {};
     this.labels = ['Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira'];
@@ -340,15 +340,44 @@ export class DiasComponent implements OnInit {
     return diasDaSemana[diaDaSemana];
   }
     
+
+  // Função do checkbox do Anual
   onCheckboxChangeAnual(event: any) {
     if (event.checked) {
-        
+      this.selectAnos = [];
+      this.anosAntigo = [];
+      for(let i = 1997; i <= 2022; i++){
+        this.selectAnos = [...this.selectAnos, i]
+        this.onAnosSelect(0);
+      }
+    } else{
+      this.resetaVariaveis();
+      this.grafico.destroy();
+      this.createChart();
     }
   }
 
+    // Função do checkbox do Mensal
   onCheckboxChangeMensal(event: any) {
-    if (event.checked) {
-        
+    this.selectMeses = [];
+    this.mesesAntigo = [];
+    if (event.checked || event.checked == undefined) {
+      this.cbMensal = true;
+    } else {
+      this.cbMensal = false;
+    }
+
+    if (this.cbMensal) {
+      console.log('entrou no check');
+      for (let i = 0; i < this.meses.length; i++) {
+        this.selectMeses = [...this.selectMeses, this.meses[i]]
+        this.onMensalSelect(0);
+      }
+      this.cbMensal = true;
+    } else {
+      this.grafico.destroy();
+      this.createChart();
+      this.cbMensal = false;
     }
   }
 
