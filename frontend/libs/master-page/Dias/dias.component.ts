@@ -9,10 +9,10 @@ import {AsyncPipe} from '@angular/common';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatInputModule} from '@angular/material/input';
 import {MatFormFieldModule} from '@angular/material/form-field';
-import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import {MatSelectModule} from '@angular/material/select';
-import { DoCheck } from '@angular/core';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 
 @Component({
   standalone: true,
@@ -29,6 +29,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
     AsyncPipe,
     MatSelectModule,
     MatCheckboxModule,
+    MatButtonToggleModule,
   ]
 })
 
@@ -73,6 +74,9 @@ export class DiasComponent implements OnInit {
 
   labels: string[] = [];
   data: number[] = [];
+  medianaOn: boolean = false;
+  medianaReal: number[] = [];
+  medianaDolar: number[] = [];
 
   // Input da forma de separação
   selectForma: string;
@@ -105,8 +109,7 @@ export class DiasComponent implements OnInit {
 
     this.labels = this.selectAnos.map(anos => anos.toString());
     ultimoAno = this.verificaUltimoValor(this.selectAnos, this.anosAntigo);
-    medias = this.calcularMediaAnual(this.dias, ultimoAno.valor);
-
+    medias = this.calcularValoresAnual(this.dias, ultimoAno.valor);
     // Depois ele verifica: O usuario está adicionando ou tirando um ano do grafico?
     // Se está tirando, ele coloca no data, senão, tira
     // Ele vai verificar qual é o index daquele ano que eu quero na lista "labels", pois
@@ -115,21 +118,29 @@ export class DiasComponent implements OnInit {
     if(ultimoAno.add){
       this.dataReal.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaReal);
       this.dataDolar.splice(this.labels.indexOf(ultimoAno.valor.toString()), 0, medias.mediaDolar);
+      this.medianaReal.splice(this.labels.indexOf(ultimoAno.valor), 0, medias.medianaReal);
+      this.medianaDolar.splice(this.labels.indexOf(ultimoAno.valor), 0, medias.medianaDolar);
     } else {
       this.dataReal.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
       this.dataDolar.splice(this.anosAntigo.indexOf(ultimoAno.valor), 1);
+      this.medianaReal.splice(this.mesesAntigo.indexOf(ultimoAno.valor), 1);
+      this.medianaDolar.splice(this.mesesAntigo.indexOf(ultimoAno.valor), 1);
     }
 
     //att o grafico
     this.anosAntigo = this.selectAnos;
-    this.atualizarGrafico(this.dataReal, this.dataDolar);
+    if(this.medianaOn == true){
+      this.atualizarGrafico(this.medianaReal, this.medianaDolar);
+    }
+    else{
+      this.atualizarGrafico(this.dataReal, this.dataDolar);
+    }
   }
 
   // Quando ele seleciona o ano la no input
   selectAno: number;
   cbMensal: boolean = false;
   onAnoSelect(event: any): void {
-    console.log('Ano e cb:', this.cbMensal);
     if(this.cbMensal){
       this.onCheckboxChangeMensal(0);
     }
@@ -148,18 +159,30 @@ export class DiasComponent implements OnInit {
     this.labels = this.selectMeses;
     ultimoMes = this.verificaUltimoValor(this.selectMeses, this.mesesAntigo);
     mesNum = this.MesParaNumero[ultimoMes.valor];
-    medias = this.calcularMediaPorMes(this.dias, this.selectAno, mesNum);
+    medias = this.calcularValoresPorMes(this.dias, this.selectAno, mesNum);
+    console.log(medias)
+
 
     if(ultimoMes.add){
       this.dataReal.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.mediaReal);
       this.dataDolar.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.mediaDolar);
+      this.medianaReal.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.medianaReal);
+      this.medianaDolar.splice(this.labels.indexOf(ultimoMes.valor), 0, medias.medianaDolar);
     } else {
       this.dataReal.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
       this.dataDolar.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
+      this.medianaReal.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
+      this.medianaDolar.splice(this.mesesAntigo.indexOf(ultimoMes.valor), 1);
     }
 
     this.mesesAntigo = this.selectMeses;
-    this.atualizarGrafico(this.dataReal, this.dataDolar);
+    if(this.medianaOn == true){
+      this.atualizarGrafico(this.medianaReal, this.medianaDolar);
+    }
+    else{
+      this.atualizarGrafico(this.dataReal, this.dataDolar);
+    }
+
   }
 
 
@@ -227,8 +250,8 @@ export class DiasComponent implements OnInit {
   }
 
   // Função para calcular a media do mes
-  calcularMediaPorMes(dias: Dia[], selectAno: number, selectMes: number): 
-  { mediaReal: number, mediaDolar: number } {
+  calcularValoresPorMes(dias: Dia[], selectAno: number, selectMes: number): 
+  { mediaReal: number, mediaDolar: number , medianaReal: number, medianaDolar: number} {
 
     //filtrando as datas para o mes espefico
     const datasFiltradas = dias.filter((teste) => {
@@ -238,41 +261,65 @@ export class DiasComponent implements OnInit {
 
     let mediaReal = 0;
     let mediaDolar = 0;
+    let medianaReal = 0;
+    let medianaDolar = 0
+    let listaMedianaReal: number[] = [];
+    let listaMedianaDolar: number[] = [];
 
     //adicionando na variavel e fazendo a media
     for(let i = 0; i < datasFiltradas.length; i++){
+      listaMedianaReal = [...listaMedianaReal, datasFiltradas[i].valorReal]
+      listaMedianaDolar = [...listaMedianaDolar, datasFiltradas[i].valorDolar]
       mediaReal += datasFiltradas[i].valorReal;
       mediaDolar += datasFiltradas[i].valorDolar;
     }
+    
     mediaReal = mediaReal/datasFiltradas.length;
     mediaDolar = mediaDolar/datasFiltradas.length;
-
+    
+    medianaReal = this.calcularMediana(listaMedianaReal);
+    medianaDolar = this.calcularMediana(listaMedianaDolar);
+    
     // toFixed() retorna uma string, ai o + transforma em number
     // toFixed() é para fazer o limite de numeros decimais
     return {
     mediaReal: +mediaReal.toFixed(2),
-    mediaDolar: +mediaDolar.toFixed(2)
+    mediaDolar: +mediaDolar.toFixed(2),
+    medianaReal: +medianaReal.toFixed(2),
+    medianaDolar: +medianaDolar.toFixed(2),
     }
   }
 
   // Função para calcular a media Anual
-  calcularMediaAnual(dias: Dia[], ano: number) : { mediaReal: number, mediaDolar: number } {
+  calcularValoresAnual(dias: Dia[], ano: number) : 
+  { mediaReal: number, mediaDolar: number, medianaReal: number, medianaDolar: number} {
     let mediaReal: number = 0;
     let mediaDolar: number = 0;
-    let medias 
+    let medianaReal = 0;
+    let medianaDolar = 0
+    let listaMedianaReal: number[] = [];
+    let listaMedianaDolar: number[] = [];
+    let medias;
 
     for(let i = 0; i < 12; i++){
-      medias = this.calcularMediaPorMes(dias, ano, i+1);
+      medias = this.calcularValoresPorMes(dias, ano, i+1);
+
+      listaMedianaReal = [...listaMedianaReal, medias.medianaReal]
+      listaMedianaDolar = [...listaMedianaDolar, medias.medianaDolar]
       mediaReal += medias.mediaReal;
       mediaDolar += medias.mediaDolar;
     }
 
+    medianaReal = this.calcularMediana(listaMedianaReal);
+    medianaDolar = this.calcularMediana(listaMedianaDolar);
     mediaReal = mediaReal/12;
     mediaDolar = mediaDolar/12;
 
     return{
       mediaReal: +mediaReal.toFixed(2),
-      mediaDolar: +mediaDolar.toFixed(2)
+      mediaDolar: +mediaDolar.toFixed(2),
+      medianaReal: +medianaReal.toFixed(2),
+      medianaDolar: +medianaDolar.toFixed(2),
     }
   }
 
@@ -381,4 +428,40 @@ export class DiasComponent implements OnInit {
     }
   }
 
+
+  onTipoChange(event: any) {
+    if (event.value === 'mediana') {
+      console.log('Mediana selecionada');
+      this.medianaOn = true;
+      this.atualizarGrafico(this.medianaReal, this.medianaDolar);
+    } else {
+      console.log('Média selecionada');
+      this.medianaOn = false;
+      this.atualizarGrafico(this.dataReal, this.dataDolar);
+    }
+  }
+
+
+  // onCheckboxMediana(eveny: any){
+  //   this.medianaOn = true;
+  //   this.atualizarGrafico(this.medianaReal, this.medianaDolar);
+  // }
+
+  calcularMediana(vetor: number[]): number {
+    // Ordene o vetor
+    vetor.sort((a, b) => a - b);
+  
+    const tamanho = vetor.length;
+  
+    // Verifique se o tamanho do vetor é ímpar ou par
+    if (tamanho % 2 === 1) {
+      // Se for ímpar, retorne o elemento do meio
+      return vetor[Math.floor(tamanho / 2)];
+    } else {
+      // Se for par, retorne a média dos dois elementos do meio
+      const meio1 = tamanho / 2 - 1;
+      const meio2 = tamanho / 2;
+      return (vetor[meio1] + vetor[meio2]) / 2;
+    }
+  }
 }

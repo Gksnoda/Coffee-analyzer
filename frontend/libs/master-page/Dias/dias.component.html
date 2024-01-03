@@ -17,7 +17,7 @@
     </mat-select>
   </mat-form-field>
 
-  <mat-checkbox (change)="onCheckboxChangeAnual($event)">Selecionar todos</mat-checkbox>
+  <mat-checkbox (change)="onCheckboxChangeAnual($event)">Selecionar todos os anos</mat-checkbox>
   
 </div>
 
@@ -39,13 +39,26 @@
     </mat-select>
   </mat-form-field>
   
-  <mat-checkbox (change)="onCheckboxChangeMensal($event)">Selecionar todos</mat-checkbox>
+  <mat-checkbox (change)="onCheckboxChangeMensal($event)">Selecionar todos os meses</mat-checkbox>
 
 </div>
 
 
 <div *ngIf="selectForma === 'Diariamente'">
 </div>
+
+<!-- <div>
+  <mat-checkbox (change)="onCheckboxMediana($event)">Mediana</mat-checkbox>
+</div> -->
+
+
+<div>
+  <mat-button-toggle-group aria-label="Font Style" (change)="onTipoChange($event)">
+    <mat-button-toggle value="media">Media</mat-button-toggle>
+    <mat-button-toggle value="mediana">Mediana</mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
 
 <div style="width: 1000px; height: 700px;"> 
   <canvas #myChart></canvas>
