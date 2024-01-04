@@ -85,7 +85,6 @@ export class DiasComponent implements OnInit {
       this.createChart();
       this.resetaVariaveis();
       if (this.selectForma === "Diariamente"){
-        console.log("Entrou no diar");
         this.diario(this.dias);
         this.atualizarGrafico(this.dataReal, this.dataDolar);
       }
@@ -160,7 +159,6 @@ export class DiasComponent implements OnInit {
     ultimoMes = this.verificaUltimoValor(this.selectMeses, this.mesesAntigo);
     mesNum = this.MesParaNumero[ultimoMes.valor];
     medias = this.calcularValoresPorMes(this.dias, this.selectAno, mesNum);
-    console.log(medias)
 
 
     if(ultimoMes.add){
@@ -279,7 +277,6 @@ export class DiasComponent implements OnInit {
     
     medianaReal = this.calcularMediana(listaMedianaReal);
     medianaDolar = this.calcularMediana(listaMedianaDolar);
-    
     // toFixed() retorna uma string, ai o + transforma em number
     // toFixed() é para fazer o limite de numeros decimais
     return {
@@ -346,7 +343,8 @@ export class DiasComponent implements OnInit {
     this.data = [];
     this.selectMeses = [];
     this.mesesAntigo = [];
-    this.selectAno = 0;
+    this.medianaReal = [];
+    this.medianaDolar = [];
   }
 
   // Função para calcular a media dos dias da semana
@@ -375,7 +373,6 @@ export class DiasComponent implements OnInit {
     });
 
     this.labels.forEach((dia)=> {
-      console.log(dia)
       this.dataReal.push(resultado[dia].valorReal);
       this.dataDolar.push(resultado[dia].valorDolar);
     });
@@ -415,7 +412,6 @@ export class DiasComponent implements OnInit {
     }
 
     if (this.cbMensal) {
-      console.log('entrou no check');
       for (let i = 0; i < this.meses.length; i++) {
         this.selectMeses = [...this.selectMeses, this.meses[i]]
         this.onMensalSelect(0);
@@ -423,6 +419,7 @@ export class DiasComponent implements OnInit {
       this.cbMensal = true;
     } else {
       this.grafico.destroy();
+      this.resetaVariaveis();
       this.createChart();
       this.cbMensal = false;
     }
@@ -434,18 +431,16 @@ export class DiasComponent implements OnInit {
       console.log('Mediana selecionada');
       this.medianaOn = true;
       this.atualizarGrafico(this.medianaReal, this.medianaDolar);
-    } else {
+    }
+    else if(event.value === 'media'){
       console.log('Média selecionada');
       this.medianaOn = false;
       this.atualizarGrafico(this.dataReal, this.dataDolar);
     }
+    else if(event.value === 'candle'){
+      console.log('candle selecionada');
+    }
   }
-
-
-  // onCheckboxMediana(eveny: any){
-  //   this.medianaOn = true;
-  //   this.atualizarGrafico(this.medianaReal, this.medianaDolar);
-  // }
 
   calcularMediana(vetor: number[]): number {
     // Ordene o vetor
